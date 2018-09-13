@@ -1,0 +1,21 @@
+service: reminders
+
+provider:
+  name: aws
+  runtime: python3.6
+  region: us-west-2
+  stage: prod
+
+functions:
+  reminders:
+    handler: reminders.handler
+    events:
+      - schedule: cron(0 11 * * ? *)
+
+plugins:
+  - serverless-python-requirements
+  - serverless-dotenv-plugin
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
