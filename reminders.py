@@ -11,7 +11,8 @@ def handler(event, context):
     DATE_COL = "A"
     TEXT_COL = "D"
 
-    gsc = GoogleSheetsClient()
+
+    gsc = GoogleSheetsClient(local=True) if event == "local" else GoogleSheetsClient()
     gsc.login()
 
     pushups_reminder = Reminder(
@@ -38,6 +39,7 @@ def handler(event, context):
     return response
 
 if __name__ == "__main__":
+    print("testing")
     from dotenv import find_dotenv, load_dotenv
     load_dotenv(find_dotenv())
-    handler(None, None)
+    handler("local", None)

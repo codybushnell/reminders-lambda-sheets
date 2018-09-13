@@ -90,7 +90,7 @@ class Reminder:
 
 class GoogleSheetsClient:
 
-    def __init__(self):
+    def __init__(self, local=False):
 
         scope = [
             'https://spreadsheets.google.com/feeds',
@@ -106,11 +106,18 @@ class GoogleSheetsClient:
             if cred_var_prefix == x[:len(cred_var_prefix)]
         ]
 
-        cred_dict = {
-            ck[len(cred_var_prefix):]: getenv(ck).replace("\\\\n", "\n")
-            for ck
-            in cred_keys
-        }
+        if local:
+            cred_dict = {
+                ck[len(cred_var_prefix):]: getenv(ck).replace("\\\\n", "\n")
+                for ck
+                in cred_keys
+            }
+        else:
+            cred_dict = {
+                ck[len(cred_var_prefix):]: getenv(ck).replace("\\n", "\n")
+                for ck
+                in cred_keys
+            }
 
         self._credentials = ServiceAccountCredentials.from_json_keyfile_dict(
             cred_dict,
